@@ -11,8 +11,11 @@
 <body>
     <h3>Witaj <?php echo $_SESSION['email'] ?> na tronie domowej</h3>
     Uprawnienia: <?php echo $_SESSION['role'] ?>
+    Twoje ID: <?php echo $_SESSION['id'] ?>
+    <br>
+    <a href="../../app/controllers/auth/logout.php">Wyloguj się</a><br>
+    <br>Zawartość strony:<br>
 
-    Zawartość strony:<br>
     <?php
         require_once "./layouts/$_SESSION[role]/content.php";
     ?>

@@ -19,4 +19,28 @@ class Work{
         return $result;
         //przekierowanie do jakiejs strony do dodania
     }
+    public function showDay($year, $month, $id_worker) {
+        if($_SESSION['role']=='pracownik'){
+            $stmt = $this->db->prepare("SELECT calendar, hours FROM work WHERE (year = ? AND month=? AND id_worker=?)");
+            $stmt->bind_param("sss", $year, $month, $_SESSION['id']);
+        }
+        else{
+            $stmt = $this->db->prepare("SELECT calendar, hours FROM work WHERE (year = ? AND month=? AND id_worker=?)");
+            $stmt->bind_param("sss", $year, $month, $id_worker);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        echo "<table border='1'>";
+        echo "<tr><th>Data</th><th>Przepracowane godziny</th></tr>";
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['calendar']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['hours']) . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+        return $result->fetch_all(MYSQLI_ASSOC);
+        //przekierowanie do jakiejs strony do dodania
+    }
 }

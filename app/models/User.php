@@ -34,6 +34,7 @@
 				//prawidłowo zalogowany użytkownik
 				$_SESSION['email'] = $user['email'];
 				$_SESSION['role'] = $user['role'];
+				$_SESSION['id'] = $user['id'];
 				header("location: ./app/views/home.php");
 			}else{
 				echo 'Błędny login lub hasło<hr><br>';

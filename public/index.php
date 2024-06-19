@@ -15,4 +15,8 @@
 	if ($_SERVER['REQUEST_URI'] == '/git/addDay') {
 		$workController->addDay();
 	}
+
+	if ($_SERVER['REQUEST_URI'] == '/git/showDay') {
+		$workController->showDay();
+	}
 	//echo "Strona startowa";

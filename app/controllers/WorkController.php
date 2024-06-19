@@ -34,4 +34,23 @@ class WorkController{
         }
         require_once BASE_PATH . '/app/views/addDay.php';
     }
+    public function showDay(){
+        $errors = [];
+        $data = [];
+        if ($_SERVER['REQUEST_METHOD']=== 'POST'){
+            $data['year'] = htmlspecialchars(trim($_POST['year']));
+            $data['month'] = htmlspecialchars(trim($_POST['month']));
+            $data['id_worker'] = htmlspecialchars(trim($_POST['id_worker']));
+
+            if (empty($errors)){
+                $this->workModel->showDay($data['year'],$data['month'],$data['id_worker']);
+                
+            }
+            else{
+                print_r($errors);
+            }
+
+        }
+        require_once BASE_PATH . '/app/views/showDay.php';
+    }
 }
