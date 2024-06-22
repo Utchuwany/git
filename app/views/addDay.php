@@ -13,3 +13,4 @@
 
     <input type="submit" value="Wprowadzenie">
 </form>
+<a href="./app/views/home.php">Powrót</a>

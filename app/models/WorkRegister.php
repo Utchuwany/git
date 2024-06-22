@@ -43,4 +43,67 @@ class Work{
         return $result->fetch_all(MYSQLI_ASSOC);
         //przekierowanie do jakiejs strony do dodania
     }
+    public function showComment($id_worker) {
+        if($_SESSION['role']=='pracownik'){
+            $stmt = $this->db->prepare("SELECT calendar, comment_user, comment_superviser, comment_admin FROM work WHERE (id_worker=?)");
+            $stmt->bind_param("s", $_SESSION['id']);
+        } else {
+            $stmt = $this->db->prepare("SELECT calendar, comment_user, comment_superviser, comment_admin FROM work WHERE (id_worker=?)");
+            $stmt->bind_param("s", $id_worker);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close();
+        echo "<table border='1'>";
+        echo "<tr><th>Data</th><th>Komentarz pracownika</th><th>Komentarz kierownika</th><th>Komentarz admina</th></tr>";
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['calendar']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['comment_user']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['comment_superviser']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['comment_admin']) . "</td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function addComment($calendar, $id_worker, $comment_user, $comment_superviser, $comment_admin) {
+
+        switch ($_SESSION ['role']) {
+            case 'Pracownik':
+                $stmt = $this->db->prepare("UPDATE work SET comment_user = ? WHERE id_worker = ? AND calendar = ?");
+                $stmt->bind_param("sis",  $comment_user, $id_worker, $calendar);
+                $result = $stmt->execute();
+                $stmt->close();
+                return $result;
+                break;
+
+
+            case 'Kierownik':
+                $stmt = $this->db->prepare("UPDATE work SET comment_superviser = ? WHERE id_worker = ? AND calendar = ?");
+                $stmt->bind_param("sis",  $comment_superviser, $id_worker, $calendar);
+                $result = $stmt->execute();
+                $stmt->close();
+                return $result;
+                break;
+
+
+            case 'Administrator':
+                $stmt = $this->db->prepare("UPDATE work SET comment_admin = ? WHERE id_worker = ? AND calendar = ?");
+                $stmt->bind_param("sis",  $comment_admin, $id_worker, $calendar);
+                $result = $stmt->execute();
+                $stmt->close();
+                return $result;
+                break;
+
+
+            default:
+            echo 'Nie udało się pobrać roli';
+            break;
+        }
+        
+    }
+    
 }
